@@ -2,7 +2,9 @@ package uk.co.niceagency.testexercice.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Adapter
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -15,6 +17,7 @@ import uk.co.niceagency.testexercice.R
 import uk.co.niceagency.testexercice.adapter.LocationAdapter
 
 
+
 import uk.co.niceagency.testexercice.model.Location
 import uk.co.niceagency.testexercice.service.DBContract
 import uk.co.niceagency.testexercice.service.SqliteDatabase
@@ -22,6 +25,8 @@ import uk.co.niceagency.testexercice.service.SqliteDatabase
 
 class MainActivity: AppCompatActivity(){
     private lateinit var layoutManager: RecyclerView.LayoutManager
+    private lateinit var recyclerView:RecyclerView
+    private lateinit var adapter: LocationAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,11 +35,8 @@ class MainActivity: AppCompatActivity(){
         val drawer_layout: DrawerLayout = findViewById(R.id.drawer_layout);
         val fab: FloatingActionButton = findViewById(R.id.fab);
         val navigation_view : NavigationView = findViewById(R.id.navigation_view)
-        val recyclerView:RecyclerView = findViewById(R.id.recycler_view)
-        val locationList = initList()
-        layoutManager = LinearLayoutManager(this)
-        recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = LocationAdapter(this,locationList)
+        recyclerView = findViewById(R.id.recycler_view)
+
         // Configure action bar
         setSupportActionBar(toolbar)
         val actionBar = supportActionBar
@@ -82,6 +84,18 @@ class MainActivity: AppCompatActivity(){
             true
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("","onResume")
+        val locationList = initList()
+        layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = layoutManager
+        adapter = LocationAdapter(this,locationList)
+        recyclerView.adapter = adapter
+
+
+    }
     fun initList(): ArrayList<Location> {
         val myList = ArrayList<Location>()
         val dbHandler = SqliteDatabase(this)
@@ -90,6 +104,7 @@ class MainActivity: AppCompatActivity(){
             cursor.moveToFirst()
             while (cursor.moveToNext()){
                 val location = Location(cursor.getString(cursor.getColumnIndex(DBContract.LocationEntry.COLUMN_NAME)));
+                Log.d("..............",cursor.getString(cursor.getColumnIndex(DBContract.LocationEntry.COLUMN_NAME)))
                 myList.addAll(listOf(location))
             }
         }
