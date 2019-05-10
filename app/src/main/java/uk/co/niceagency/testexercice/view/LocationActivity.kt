@@ -5,6 +5,7 @@ import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity;
 
 import kotlinx.android.synthetic.main.activity_location.*
@@ -29,15 +30,15 @@ class LocationActivity : AppCompatActivity() {
             false
         }
         save_image.setOnClickListener {
-            val dbHandler = SqliteDatabase(this)
-            val user = Location(cityName.text.toString())
-            dbHandler.addName(user)
+            if (!cityName.text.toString().equals("")) {
+                val dbHandler = SqliteDatabase(this)
+                val user = Location(cityName.text.toString())
+                dbHandler.addName(user)
+                Toast.makeText(this, "Add record", Toast.LENGTH_LONG).show()
+            }else{
+                Toast.makeText(this, "enter city name", Toast.LENGTH_LONG).show()
+            }
         }
-
-        val dbHandler = SqliteDatabase(this)
-        val user = Location("")
-        dbHandler.addName(user)
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

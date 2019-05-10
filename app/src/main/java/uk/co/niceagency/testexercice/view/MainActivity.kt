@@ -7,9 +7,12 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import uk.co.niceagency.testexercice.R
+import uk.co.niceagency.testexercice.adapter.LocationAdapter
 
 
 import uk.co.niceagency.testexercice.model.Location
@@ -18,6 +21,7 @@ import uk.co.niceagency.testexercice.service.SqliteDatabase
 
 
 class MainActivity: AppCompatActivity(){
+    private lateinit var layoutManager: RecyclerView.LayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +30,11 @@ class MainActivity: AppCompatActivity(){
         val drawer_layout: DrawerLayout = findViewById(R.id.drawer_layout);
         val fab: FloatingActionButton = findViewById(R.id.fab);
         val navigation_view : NavigationView = findViewById(R.id.navigation_view)
+        val recyclerView:RecyclerView = findViewById(R.id.recycler_view)
         val locationList = initList()
+        layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = layoutManager
+        recyclerView.adapter = LocationAdapter(this,locationList)
         // Configure action bar
         setSupportActionBar(toolbar)
         val actionBar = supportActionBar

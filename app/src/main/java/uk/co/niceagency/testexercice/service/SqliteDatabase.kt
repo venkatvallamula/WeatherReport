@@ -24,6 +24,9 @@ class SqliteDatabase(context: Context): SQLiteOpenHelper(context, DATABASE_NAME,
         super.onDowngrade(db, oldVersion, newVersion)
     }
     fun addName(location: Location) {
+        val db1=readableDatabase
+        val cursor = db1.rawQuery("SELECT * FROM $TABLE_NAME", null)
+        
         val values = ContentValues()
         values.put(COLUMN_NAME, location.locationName)
         val db = this.writableDatabase
